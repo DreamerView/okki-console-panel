@@ -3,6 +3,7 @@
 A lightweight local web-based file explorer and environment diagnostics tool.  
 It displays system info, file/folder structure, extensions, and lets you preview or edit code output from files — all in one dashboard.
 
+![Preview](console.png)
 ---
 
 ## 🔧 Features
