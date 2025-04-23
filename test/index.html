@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot SSE Example</title>
+</head>
+<body>
+    <h1>Сообщения от Telegram</h1>
+    <div id="messages"></div>
+
+    <script>
+        let eventSource; // Переменная для хранения экземпляра EventSource
+        let retryInterval = 1000; // Интервал между попытками подключения в миллисекундах
+
+        function connect() {
+            eventSource = new EventSource('http://localhost:3000/events');
+
+            eventSource.onmessage = function(event) {
+                const newElement = document.createElement('div');
+                newElement.textContent = 'Новое сообщение: ' + event.data;
+                document.getElementById('messages').appendChild(newElement);
+            };
+
+            eventSource.onerror = function() {
+                console.error('Ошибка соединения, попытка переподключения через ' + retryInterval / 1000 + ' секунд...');
+                eventSource.close(); // Закрываем текущее соединение
+
+                // Пробуем подключиться заново через указанный интервал
+                setTimeout(() => {
+                    connect(); // Рекурсивный вызов для повторного подключения
+                }, retryInterval);
+            };
+        }
+
+        // Инициализируем первое соединение
+        connect();
+    </script>
+</body>
+</html>
